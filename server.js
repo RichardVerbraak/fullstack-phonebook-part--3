@@ -41,6 +41,8 @@ app.use(
 
 app.use(express.json())
 
+app.use(express.static('/build'))
+
 app.get('/api/persons', (req, res) => {
 	res.send(persons)
 })
