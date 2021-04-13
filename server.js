@@ -136,7 +136,7 @@ app.delete('/api/persons/:id', (req, res) => {
 	res.send(filtered)
 })
 
-app.use(express.static('/build'))
+app.use(express.static('build'))
 
 const PORT = process.env.PORT || 3001
 
