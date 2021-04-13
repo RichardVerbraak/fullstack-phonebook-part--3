@@ -35,11 +35,23 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-const name = process.argv[3]
-const number = process.argv[4]
+// Find all persons when there arent any arguments after password
+if (process.argv.length === 3) {
+	console.log('Phonebook: ')
+	Person.find({}).then((result) => {
+		result.forEach((person) => {
+			console.log(person.name, person.number)
+		})
+	})
+}
 
-const anna = new Person({ name, number })
+if (process.argv.length > 3) {
+	const name = process.argv[3]
+	const number = process.argv[4]
 
-anna.save().then((result) => {
-	console.log(`added ${name} number ${number} to phonebook`)
-})
+	const person = new Person({ name, number })
+
+	person.save().then((result) => {
+		console.log(`added ${name} number ${number} to phonebook`)
+	})
+}
