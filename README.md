@@ -1,1 +1,1 @@
-Link to the heroku site: https://secret-reef-33705.herokuapp.com/api/persons
+Link to the heroku site: https://secret-reef-33705.herokuapp.com
