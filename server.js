@@ -41,8 +41,6 @@ app.use(
 
 app.use(express.json())
 
-app.use(express.static('/build'))
-
 app.get('/api/persons', (req, res) => {
 	res.send(persons)
 })
@@ -137,6 +135,8 @@ app.delete('/api/persons/:id', (req, res) => {
 
 	res.send(filtered)
 })
+
+app.use(express.static('/build'))
 
 const PORT = process.env.PORT || 3001
 
