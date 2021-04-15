@@ -77,8 +77,8 @@ const App = () => {
 		} else {
 			const person = { name: newName, number: newNumber }
 
-			savePerson(person).then((persons) => {
-				setPersons(persons)
+			savePerson(person).then((savedPerson) => {
+				setPersons({ ...persons, savedPerson })
 			})
 
 			setMessage({
