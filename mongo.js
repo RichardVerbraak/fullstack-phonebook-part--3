@@ -1,23 +1,23 @@
 const mongoose = require('mongoose')
+const dotenv = require('dotenv')
 
-if (process.argv.length < 3) {
-	console.log('Requires password as third argument: node mongo.js <password>')
-	process.exit(1)
-}
+dotenv.config()
 
-const password = process.argv[2]
+// if (process.argv.length < 3) {
+// 	console.log('Requires password as third argument: node mongo.js <password>')
+// 	process.exit(1)
+// }
+
+// const password = process.argv[2]
 
 const connectDB = async () => {
 	try {
-		const connect = await mongoose.connect(
-			`mongodb+srv://richard123:${password}@cluster0.4twt3.mongodb.net/test`,
-			{
-				useNewUrlParser: true,
-				useUnifiedTopology: true,
-				useFindAndModify: false,
-				useCreateIndex: true,
-			}
-		)
+		const connect = await mongoose.connect(process.env.MONGO_URI, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useFindAndModify: false,
+			useCreateIndex: true,
+		})
 
 		console.log(`MongoDB connected to: ${connect.connection.host}`)
 	} catch (error) {
