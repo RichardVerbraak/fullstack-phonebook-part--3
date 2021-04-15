@@ -1,33 +1,14 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const connectDB = require('./config/db')
+const Person = require('./models/Person')
 
 const app = express()
 
-app.use(cors())
+connectDB()
 
-let persons = [
-	{
-		id: 1,
-		name: 'Arto Hellas',
-		number: '040-123456',
-	},
-	{
-		id: 2,
-		name: 'Ada Lovelace',
-		number: '39-44-5323523',
-	},
-	{
-		id: 3,
-		name: 'Dan Abramov',
-		number: '12-43-234345',
-	},
-	{
-		id: 4,
-		name: 'Mary Poppendick',
-		number: '39-23-6423122',
-	},
-]
+app.use(cors())
 
 morgan.token('person', (req, res) => {
 	return JSON.stringify(req.body)
@@ -42,7 +23,11 @@ app.use(
 app.use(express.json())
 
 app.get('/api/persons', (req, res) => {
-	res.send(persons)
+	Person.find({}).then((result) => {
+		result.forEach((person) => {
+			console.log(person.name, person.number)
+		})
+	})
 })
 
 app.get('/info', (req, res) => {
