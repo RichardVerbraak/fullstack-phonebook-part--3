@@ -6,12 +6,16 @@ const Person = require('./models/Person')
 const errorHandler = require('./middleware/errorHandler')
 const notFound = require('./middleware/notFound')
 
+// Init app
 const app = express()
 
+// Connect to MongoDB
 connectDB()
 
+// Cross origin resource so React works w/ backend on the same port
 app.use(cors())
 
+// Morgan showing the data from the req.body whenever a request is made
 morgan.token('person', (req, res) => {
 	return JSON.stringify(req.body)
 })
@@ -22,14 +26,21 @@ app.use(
 	)
 )
 
+// Body parser
 app.use(express.json())
 
+//////////////////
+//# Routes
+//////////////////
+
+// Fetch all persons
 app.get('/api/persons', (req, res) => {
 	Person.find({}).then((persons) => {
 		res.send(persons)
 	})
 })
 
+// Fetch info about the amount of persons in the phonebook && current time
 app.get('/info', (req, res) => {
 	const currentTime = new Date()
 
@@ -43,6 +54,7 @@ app.get('/info', (req, res) => {
 	)
 })
 
+// Fetch a single person
 app.get('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 
@@ -57,6 +69,7 @@ app.get('/api/persons/:id', (req, res) => {
 		})
 })
 
+// Add a single person
 app.post('/api/persons', (req, res) => {
 	const { name, number } = req.body
 
@@ -75,6 +88,7 @@ app.post('/api/persons', (req, res) => {
 	}
 })
 
+// Update a single person
 app.put('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 	const { name, number } = req.body
@@ -94,6 +108,7 @@ app.put('/api/persons/:id', (req, res) => {
 	}
 })
 
+// Delete a single person
 app.delete('/api/persons/:id', (req, res, next) => {
 	Person.findByIdAndRemove(req.params.id)
 		.then((result) => {
