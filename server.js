@@ -3,6 +3,8 @@ const morgan = require('morgan')
 const cors = require('cors')
 const connectDB = require('./config/db')
 const Person = require('./models/Person')
+const errorHandler = require('./middleware/errorHandler')
+const notFound = require('./middleware/notFound')
 
 const app = express()
 
@@ -44,17 +46,15 @@ app.get('/info', (req, res) => {
 app.get('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 
-	const found = persons.find((person) => {
-		return person.id === id
-	})
-
-	if (!found) {
-		res.status(404)
-		res.send('Not found')
-	} else {
-		res.status(200)
-		res.send(found)
-	}
+	Person.findById(id)
+		.then((person) => {
+			if (person) res.status(200).send(person)
+			response.status(404).end()
+		})
+		.catch((error) => {
+			console.log(error)
+			res.status(400).send({ error: 'Malformed ID' })
+		})
 })
 
 app.post('/api/persons', (req, res) => {
@@ -94,19 +94,34 @@ app.put('/api/persons/:id', (req, res) => {
 	}
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
 	const id = Number(req.params.id)
+	console.log(req.params.id)
+	console.log(id)
 
-	const filtered = persons.filter((person) => {
-		return person.id !== id
-	})
-
-	persons = filtered
-
-	res.send(filtered)
+	if (req.params.id) {
+		Person.findByIdAndRemove(req.params.id)
+			.then((result) => {
+				res.status(204)
+				res.end()
+			})
+			.catch((error) => {
+				next(error)
+			})
+	} else {
+		res.status(400)
+		res.json({ error: 'No ID' })
+	}
 })
 
+// Build static file from the build folder
 app.use(express.static('build'))
+
+// Not Found Route
+app.use(notFound)
+
+// Error handler
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 

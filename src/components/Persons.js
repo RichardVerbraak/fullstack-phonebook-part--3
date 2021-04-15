@@ -9,12 +9,12 @@ const Persons = ({ persons, filter, removePerson }) => {
 				})
 				.map((person) => {
 					return (
-						<div key={person.id}>
+						<div key={person._id}>
 							<span>{person.name}</span> <span>{person.number}</span>{' '}
 							<button
 								onClick={() => {
 									if (window.confirm(`Delete ${person.name}?`)) {
-										removePerson(person.id)
+										removePerson(person._id)
 									}
 								}}
 							>

@@ -17,6 +17,7 @@ const savePerson = (person) => {
 	})
 }
 
+// Doesnt return any data except the status of the request
 const deletePerson = (id) => {
 	const request = axios.delete(`${baseURL}/${id}`)
 	return request.then((response) => {

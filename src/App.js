@@ -79,6 +79,8 @@ const App = () => {
 
 			savePerson(person).then((savedPerson) => {
 				setPersons([...persons, savedPerson])
+				newName('')
+				newNumber('')
 			})
 
 			setMessage({
@@ -92,8 +94,11 @@ const App = () => {
 	}
 
 	const removePerson = (id) => {
-		deletePerson(id).then((persons) => {
-			setPersons(persons)
+		deletePerson(id).then(() => {
+			const filtered = persons.filter((person) => {
+				return person._id !== id
+			})
+			setPersons(filtered)
 		})
 	}
 
