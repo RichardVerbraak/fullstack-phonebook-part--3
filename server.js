@@ -23,10 +23,8 @@ app.use(
 app.use(express.json())
 
 app.get('/api/persons', (req, res) => {
-	Person.find({}).then((result) => {
-		result.forEach((person) => {
-			console.log(person.name, person.number)
-		})
+	Person.find({}).then((persons) => {
+		res.send(persons)
 	})
 })
 
