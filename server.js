@@ -22,10 +22,13 @@ app.use(
 
 app.use(express.json())
 
+// Using select instead of transforming the toJSON method
 app.get('/api/persons', (req, res) => {
-	Person.find({}).then((persons) => {
-		res.send(persons)
-	})
+	Person.find({})
+		.select('-_id -__v')
+		.then((persons) => {
+			res.send(persons)
+		})
 })
 
 app.get('/info', (req, res) => {
