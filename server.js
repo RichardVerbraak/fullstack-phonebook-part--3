@@ -95,23 +95,14 @@ app.put('/api/persons/:id', (req, res) => {
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
-	const id = Number(req.params.id)
-	console.log(req.params.id)
-	console.log(id)
-
-	if (req.params.id) {
-		Person.findByIdAndRemove(req.params.id)
-			.then((result) => {
-				res.status(204)
-				res.end()
-			})
-			.catch((error) => {
-				next(error)
-			})
-	} else {
-		res.status(400)
-		res.json({ error: 'No ID' })
-	}
+	Person.findByIdAndRemove(req.params.id)
+		.then((result) => {
+			res.status(204)
+			res.end()
+		})
+		.catch((error) => {
+			next(error)
+		})
 })
 
 // Build static file from the build folder
