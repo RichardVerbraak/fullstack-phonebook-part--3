@@ -64,27 +64,14 @@ app.post('/api/persons', (req, res) => {
 	const { name, number } = req.body
 
 	if (name && number) {
-		const exists = persons.find((person) => {
-			return person.name.toLowerCase() === name.toLowerCase()
+		const person = new Person({
+			name,
+			number,
 		})
 
-		if (!exists) {
-			const id = Math.floor(Math.random() * 10000)
-
-			const person = {
-				id,
-				name,
-				number,
-			}
-
-			persons = [...persons, person]
-
-			res.status(200)
-			res.send(persons)
-		} else {
-			res.status(303)
-			res.json({ error: 'User already exists' })
-		}
+		person.save().then((savedPerson) => {
+			res.send(savedPerson)
+		})
 	} else {
 		res.status(404)
 		res.json({ error: 'Name or number missing' })
