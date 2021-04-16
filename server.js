@@ -58,8 +58,11 @@ app.get('/info', (req, res) => {
 app.get('/api/persons/:id', (req, res, next) => {
 	Person.findById(req.params.id)
 		.then((person) => {
-			if (person) res.status(200).send(person)
-			response.status(404).end()
+			if (person) {
+				res.status(200).send(person)
+			} else {
+				res.status(404).end()
+			}
 		})
 		.catch((error) => {
 			next(error)
