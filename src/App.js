@@ -62,6 +62,7 @@ const App = () => {
 						setPersons(updatedArray)
 					})
 					.catch((error) => {
+						console.log(error)
 						setMessage({
 							text: `Information of ${updatedPerson.name} has already been removed from the server`,
 							success: false,
@@ -77,16 +78,25 @@ const App = () => {
 		} else {
 			const person = { name: newName, number: newNumber }
 
-			savePerson(person).then((savedPerson) => {
-				setPersons([...persons, savedPerson])
-				setNewName('')
-				setNewNumber('')
-			})
+			savePerson(person)
+				.then((savedPerson) => {
+					setPersons([...persons, savedPerson])
 
-			setMessage({
-				text: `Added ${newName}`,
-				success: true,
-			})
+					setMessage({
+						text: `Added ${newName}`,
+						success: true,
+					})
+
+					setNewName('')
+					setNewNumber('')
+				})
+				.catch((error) => {
+					setMessage({
+						text: error.response.data.error,
+						success: false,
+					})
+				})
+
 			setTimeout(() => {
 				setMessage('')
 			}, 5000)

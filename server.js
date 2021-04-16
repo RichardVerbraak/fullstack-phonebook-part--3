@@ -104,7 +104,10 @@ app.post('/api/persons', (req, res, next) => {
 app.put('/api/persons/:id', (req, res, next) => {
 	const { name, number } = req.body
 
-	Person.findByIdAndUpdate(req.params.id, { name, number }, { new: true })
+	// Set context to 'query' so the mongoose-unique package works with runValidators
+	const options = { new: true, runValidators: true, context: 'query' }
+
+	Person.findByIdAndUpdate(req.params.id, { name, number }, options)
 		.then((person) => {
 			if (person) {
 				res.status(200)
