@@ -1,7 +1,7 @@
 const { response } = require('express')
 
 const errorHandler = (error, req, res, next) => {
-	console.log(error.message)
+	console.log(error.message, 'middleware')
 
 	if (error.name === 'CastError') {
 		return res.status(400).json({ error: 'Malformatted ID' })
