@@ -89,23 +89,22 @@ app.post('/api/persons', (req, res) => {
 })
 
 // Update a single person
-app.put('/api/persons/:id', (req, res) => {
-	const id = Number(req.params.id)
+app.put('/api/persons/:id', (req, res, next) => {
 	const { name, number } = req.body
 
-	const foundPerson = persons.find((person) => {
-		return person.id === id
-	})
-
-	if (foundPerson) {
-		foundPerson.name = name
-		foundPerson.number = number
-
-		res.json(foundPerson)
-	} else {
-		res.status(404)
-		res.json({ error: 'No user found' })
-	}
+	Person.findByIdAndUpdate(req.params.id, { name, number }, { new: true })
+		.then((person) => {
+			if (person) {
+				res.status(200)
+				res.send(person)
+			} else {
+				res.status(404)
+				res.json({ error: 'No user found' })
+			}
+		})
+		.catch((error) => {
+			next(error)
+		})
 })
 
 // Delete a single person
