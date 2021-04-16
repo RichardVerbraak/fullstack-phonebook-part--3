@@ -41,17 +41,24 @@ app.get('/api/persons', (req, res) => {
 })
 
 // Fetch info about the amount of persons in the phonebook && current time
-app.get('/info', (req, res) => {
+app.get('/api/info', (req, res, next) => {
 	const currentTime = new Date()
 
-	res.send(
-		`
-        <div>
-            <p>Phonebook has info for ${persons.length} people</p>
-            <p>${currentTime}</p>
-        </div>
-        `
-	)
+	Person.find({})
+		.then((persons) => {
+			res.status(200)
+			res.send(
+				`
+			<div>
+				<p>Phonebook has info for ${persons.length} people</p>
+				<p>${currentTime}</p>
+			</div>
+			`
+			)
+		})
+		.catch((error) => {
+			next(error)
+		})
 })
 
 // Fetch a single person
