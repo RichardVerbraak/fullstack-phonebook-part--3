@@ -55,22 +55,19 @@ app.get('/info', (req, res) => {
 })
 
 // Fetch a single person
-app.get('/api/persons/:id', (req, res) => {
-	const id = Number(req.params.id)
-
-	Person.findById(id)
+app.get('/api/persons/:id', (req, res, next) => {
+	Person.findById(req.params.id)
 		.then((person) => {
 			if (person) res.status(200).send(person)
 			response.status(404).end()
 		})
 		.catch((error) => {
-			console.log(error)
-			res.status(400).send({ error: 'Malformed ID' })
+			next(error)
 		})
 })
 
 // Add a single person
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
 	const { name, number } = req.body
 
 	if (name && number) {
@@ -79,9 +76,14 @@ app.post('/api/persons', (req, res) => {
 			number,
 		})
 
-		person.save().then((savedPerson) => {
-			res.send(savedPerson)
-		})
+		person
+			.save()
+			.then((savedPerson) => {
+				res.send(savedPerson)
+			})
+			.catch((error) => {
+				next(error)
+			})
 	} else {
 		res.status(404)
 		res.json({ error: 'Name or number missing' })
