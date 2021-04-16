@@ -95,7 +95,7 @@ app.post('/api/persons', (req, res, next) => {
 				next(error)
 			})
 	} else {
-		res.status(404)
+		res.status(400)
 		res.json({ error: 'Name or number missing' })
 	}
 })
