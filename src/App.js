@@ -62,17 +62,10 @@ const App = () => {
 						setPersons(updatedArray)
 					})
 					.catch((error) => {
-						console.log(error)
 						setMessage({
-							text: `Information of ${updatedPerson.name} has already been removed from the server`,
+							text: error.response.data.error,
 							success: false,
 						})
-
-						// Filter out person who was about to be updated but was already removed
-						const filtered = persons.filter((person) => {
-							return person.id !== updatedPerson.id
-						})
-						setPersons(filtered)
 					})
 			}
 		} else {
