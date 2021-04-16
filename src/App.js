@@ -60,6 +60,9 @@ const App = () => {
 							return person.id !== data.id ? person : data
 						})
 						setPersons(updatedArray)
+
+						setNewName('')
+						setNewNumber('')
 					})
 					.catch((error) => {
 						setMessage({
